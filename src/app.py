@@ -10,6 +10,9 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+
+
 
 # from models import Person
 
@@ -28,7 +31,11 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["JWT_SECRET_KEY"] = os.environ.get(
+    "CLAVE_PRIVADA_JWT")  
+
 MIGRATE = Migrate(app, db, compare_type=True)
+jwt = JWTManager(app)
 db.init_app(app)
 
 # add the admin
